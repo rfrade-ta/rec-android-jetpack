@@ -1,7 +1,8 @@
 package com.viator.android.rec.di
 
-import androidx.appcompat.app.AppCompatActivity
-import com.viator.android.rec.MainActivity
+import com.viator.android.rec.data.api.StarWarsService
+import com.viator.android.rec.data.datasource.StarWarsDataSource
+import com.viator.android.rec.data.datasource.StarWarsDataSourceImpl
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -12,7 +13,17 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 internal object AppModule {
 
-    @Provides
     @Singleton
-    fun provideNavHostActivityClass(): Class<out AppCompatActivity> = MainActivity::class.java
+    @Provides
+    fun provideStarWarsService(): StarWarsService {
+        return StarWarsService.create()
+    }
+
+    @Singleton
+    @Provides
+    fun provideStarWarsDataSource(
+        starWarsService: StarWarsService
+    ): StarWarsDataSource {
+        return StarWarsDataSourceImpl(starWarsService)
+    }
 }
